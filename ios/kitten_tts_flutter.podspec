@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'kitten_tts_flutter'
-  s.version          = '0.1.2'
+  s.version          = '0.1.3'
   s.summary          = 'KittenTTS v0.8 - Offline text-to-speech for Flutter.'
   s.description      = <<-DESC
 High-quality offline text-to-speech using the KittenML v0.8 ONNX model with espeak-ng phonemization.
@@ -10,26 +10,24 @@ High-quality offline text-to-speech using the KittenML v0.8 ONNX model with espe
   s.author           = { 'KittenTTS' => 'dev@example.com' }
   s.source           = { :path => '.' }
 
-  # Swift plugin + espeak-ng C sources (all local to ios/)
+  espeak_dir = 'kitten_tts_flutter/Sources/kitten_tts_flutter/espeak'
+
   s.source_files = [
     'kitten_tts_flutter/Sources/kitten_tts_flutter/**/*.swift',
-    'Classes/espeak-ng/**/*.c',
-    'Classes/espeak-ng/**/*.h',
-    'espeak_config.h',
+    "#{espeak_dir}/**/*.c",
+    "#{espeak_dir}/**/*.h",
   ]
 
-  s.public_header_files = 'Classes/espeak-ng/include/**/*.h'
-  s.preserve_paths = 'Classes/espeak-ng/**/*'
+  s.public_header_files = "#{espeak_dir}/include/**/*.h"
 
   s.pod_target_xcconfig = {
     'DEFINES_MODULE' => 'YES',
     'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386',
     'HEADER_SEARCH_PATHS' => [
-      '$(PODS_TARGET_SRCROOT)/Classes/espeak-ng/include',
-      '$(PODS_TARGET_SRCROOT)/Classes/espeak-ng/include/espeak-ng',
-      '$(PODS_TARGET_SRCROOT)/Classes/espeak-ng',
-      '$(PODS_TARGET_SRCROOT)/Classes/espeak-ng/ucd-include',
-      '$(PODS_TARGET_SRCROOT)',
+      "$(PODS_TARGET_SRCROOT)/#{espeak_dir}/include",
+      "$(PODS_TARGET_SRCROOT)/#{espeak_dir}/include/espeak-ng",
+      "$(PODS_TARGET_SRCROOT)/#{espeak_dir}",
+      "$(PODS_TARGET_SRCROOT)/#{espeak_dir}/ucd-include",
     ].join(' '),
     'GCC_PREPROCESSOR_DEFINITIONS' => [
       'HAVE_STDINT_H=1',
@@ -42,7 +40,7 @@ High-quality offline text-to-speech using the KittenML v0.8 ONNX model with espe
       'USE_SPEECHPLAYER=0',
       'PACKAGE_VERSION=\"1.52.0\"',
     ].join(' '),
-    'OTHER_CFLAGS' => '-w -include $(PODS_TARGET_SRCROOT)/espeak_config.h',
+    'OTHER_CFLAGS' => "-w -include $(PODS_TARGET_SRCROOT)/#{espeak_dir}/espeak_config.h",
   }
 
   s.dependency 'Flutter'
