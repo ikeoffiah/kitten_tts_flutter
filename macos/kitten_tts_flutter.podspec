@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'kitten_tts_flutter'
-  s.version          = '0.1.1'
+  s.version          = '0.1.2'
   s.summary          = 'KittenTTS v0.8 - Offline text-to-speech for Flutter.'
   s.description      = <<-DESC
 High-quality offline text-to-speech using the KittenML v0.8 ONNX model with espeak-ng phonemization.
@@ -10,35 +10,24 @@ High-quality offline text-to-speech using the KittenML v0.8 ONNX model with espe
   s.author           = { 'KittenTTS' => 'dev@example.com' }
   s.source           = { :path => '.' }
 
-  espeak_root = '../third_party/espeak-ng'
-
   s.source_files = [
     'kitten_tts_flutter/Sources/kitten_tts_flutter/**/*.swift',
-    "#{espeak_root}/src/libespeak-ng/*.c",
-    "#{espeak_root}/src/libespeak-ng/*.h",
-    "#{espeak_root}/src/ucd-tools/src/*.c",
-    "#{espeak_root}/src/ucd-tools/src/include/**/*.h",
-    "#{espeak_root}/src/include/**/*.h",
+    'Classes/espeak-ng/**/*.c',
+    'Classes/espeak-ng/**/*.h',
     'espeak_config.h',
   ]
 
-  s.exclude_files = [
-    "#{espeak_root}/src/libespeak-ng/compiledata.c",
-    "#{espeak_root}/src/libespeak-ng/sPlayer.c",
-    "#{espeak_root}/src/libespeak-ng/spect.c",
-  ]
-
-  s.preserve_paths = "#{espeak_root}/**/*"
-  s.public_header_files = "#{espeak_root}/src/include/**/*.h"
+  s.public_header_files = 'Classes/espeak-ng/include/**/*.h'
+  s.preserve_paths = 'Classes/espeak-ng/**/*'
 
   s.pod_target_xcconfig = {
     'DEFINES_MODULE' => 'YES',
     'HEADER_SEARCH_PATHS' => [
-      "$(PODS_TARGET_SRCROOT)/#{espeak_root}/src/include",
-      "$(PODS_TARGET_SRCROOT)/#{espeak_root}/src/include/espeak-ng",
-      "$(PODS_TARGET_SRCROOT)/#{espeak_root}/src/libespeak-ng",
-      "$(PODS_TARGET_SRCROOT)/#{espeak_root}/src/ucd-tools/src/include",
-      "$(PODS_TARGET_SRCROOT)",
+      '$(PODS_TARGET_SRCROOT)/Classes/espeak-ng/include',
+      '$(PODS_TARGET_SRCROOT)/Classes/espeak-ng/include/espeak-ng',
+      '$(PODS_TARGET_SRCROOT)/Classes/espeak-ng',
+      '$(PODS_TARGET_SRCROOT)/Classes/espeak-ng/ucd-include',
+      '$(PODS_TARGET_SRCROOT)',
     ].join(' '),
     'GCC_PREPROCESSOR_DEFINITIONS' => [
       'HAVE_STDINT_H=1',
