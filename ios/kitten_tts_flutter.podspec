@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'kitten_tts_flutter'
-  s.version          = '0.1.3'
+  s.version          = '0.1.4'
   s.summary          = 'KittenTTS v0.8 - Offline text-to-speech for Flutter.'
   s.description      = <<-DESC
 High-quality offline text-to-speech using the KittenML v0.8 ONNX model with espeak-ng phonemization.
@@ -10,7 +10,7 @@ High-quality offline text-to-speech using the KittenML v0.8 ONNX model with espe
   s.author           = { 'KittenTTS' => 'dev@example.com' }
   s.source           = { :path => '.' }
 
-  espeak_dir = 'kitten_tts_flutter/Sources/kitten_tts_flutter/espeak'
+  espeak_dir = 'kitten_tts_flutter/Sources/espeak_ng'
 
   s.source_files = [
     'kitten_tts_flutter/Sources/kitten_tts_flutter/**/*.swift',

@@ -1,13 +1,11 @@
 import Flutter
 import UIKit
-
-@_silgen_name("kitten_tts_force_link_espeak")
-func kittenTtsForceLink()
+import espeak_ng
 
 public class KittenTtsFlutterPlugin: NSObject, FlutterPlugin {
   public static func register(with registrar: FlutterPluginRegistrar) {
     // Force linker to retain espeak-ng C symbols for Dart FFI
-    kittenTtsForceLink()
+    kitten_tts_force_link_espeak()
 
     let channel = FlutterMethodChannel(
       name: "kitten_tts_flutter",
