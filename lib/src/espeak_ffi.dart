@@ -2,7 +2,6 @@ import 'dart:ffi';
 import 'dart:io';
 import 'package:ffi/ffi.dart';
 
-/// C function signatures for espeak-ng.
 typedef _EspeakInitializeC = Int32 Function(
   Int32 output,
   Int32 buflength,
@@ -35,21 +34,23 @@ typedef _EspeakTerminateDart = int Function();
 
 /// Low-level FFI wrapper around the espeak-ng C library.
 ///
-/// On iOS/macOS, espeak-ng is statically linked via the plugin framework,
+/// On iOS/macOS, espeak-ng is statically linked via the plugin podspec,
 /// so symbols are looked up from the process itself.
 /// On Android/Linux, the shared library is loaded dynamically.
 class EspeakFfi {
-  late final DynamicLibrary _lib;
-  late final _EspeakInitializeDart _initialize;
-  late final _EspeakSetVoiceByNameDart _setVoiceByName;
-  late final _EspeakTextToPhonemesDart _textToPhonemes;
-  late final _EspeakTerminateDart _terminate;
+  DynamicLibrary? _lib;
+  _EspeakInitializeDart? _initialize;
+  _EspeakSetVoiceByNameDart? _setVoiceByName;
+  _EspeakTextToPhonemesDart? _textToPhonemes;
+  _EspeakTerminateDart? _terminate;
 
+  bool _loaded = false;
   bool _ready = false;
   bool get isReady => _ready;
 
-  /// Load the espeak-ng dynamic library.
   void load() {
+    if (_loaded) return;
+
     if (Platform.isIOS || Platform.isMacOS) {
       _lib = DynamicLibrary.process();
     } else if (Platform.isAndroid) {
@@ -59,40 +60,39 @@ class EspeakFfi {
     } else if (Platform.isWindows) {
       _lib = DynamicLibrary.open('espeak-ng.dll');
     } else {
-      throw UnsupportedError('espeak-ng is not supported on ${Platform.operatingSystem}');
+      throw UnsupportedError('espeak-ng not supported on ${Platform.operatingSystem}');
     }
 
-    _initialize = _lib.lookupFunction<_EspeakInitializeC, _EspeakInitializeDart>(
+    _initialize = _lib!.lookupFunction<_EspeakInitializeC, _EspeakInitializeDart>(
       'espeak_Initialize',
     );
-    _setVoiceByName = _lib.lookupFunction<_EspeakSetVoiceByNameC, _EspeakSetVoiceByNameDart>(
+    _setVoiceByName = _lib!.lookupFunction<_EspeakSetVoiceByNameC, _EspeakSetVoiceByNameDart>(
       'espeak_SetVoiceByName',
     );
-    _textToPhonemes = _lib.lookupFunction<_EspeakTextToPhonemesC, _EspeakTextToPhonemesDart>(
+    _textToPhonemes = _lib!.lookupFunction<_EspeakTextToPhonemesC, _EspeakTextToPhonemesDart>(
       'espeak_TextToPhonemes',
     );
-    _terminate = _lib.lookupFunction<_EspeakTerminateC, _EspeakTerminateDart>(
+    _terminate = _lib!.lookupFunction<_EspeakTerminateC, _EspeakTerminateDart>(
       'espeak_Terminate',
     );
+
+    _loaded = true;
   }
 
-  /// Initialize espeak-ng with the path to `espeak-ng-data`.
-  ///
-  /// [dataPath] should be the directory containing espeak-ng data files
-  /// (the parent of the `espeak-ng-data` folder, or the folder itself
-  /// depending on the espeak-ng version).
+  /// Initialize espeak-ng with the path to the directory containing
+  /// the `espeak-ng-data` folder.
   void init(String dataPath) {
     final pathPtr = dataPath.toNativeUtf8();
     try {
       // AUDIO_OUTPUT_RETRIEVAL = 0x0002, DONT_EXIT = 0x8000
-      final result = _initialize(0x0002, 0, pathPtr, 0x8000);
+      final result = _initialize!(0x0002, 0, pathPtr, 0x8000);
       if (result == -1) {
-        throw Exception('espeak_Initialize failed (returned -1). Check data path: $dataPath');
+        throw Exception('espeak_Initialize failed. Check data path: $dataPath');
       }
 
       final voicePtr = 'en-us'.toNativeUtf8();
       try {
-        _setVoiceByName(voicePtr);
+        _setVoiceByName!(voicePtr);
       } finally {
         calloc.free(voicePtr);
       }
@@ -103,7 +103,6 @@ class EspeakFfi {
     }
   }
 
-  /// Convert English text to IPA phonemes.
   String phonemize(String text) {
     if (!_ready) throw StateError('EspeakFfi not initialized');
 
@@ -116,7 +115,7 @@ class EspeakFfi {
 
       while (true) {
         // textmode = 1 (UTF-8), phonememode = 0x02 (IPA)
-        final result = _textToPhonemes(ptrToPtr, 1, 0x02);
+        final result = _textToPhonemes!(ptrToPtr, 1, 0x02);
         if (result == nullptr) break;
         final phoneme = result.toDartString();
         if (phoneme.isEmpty) break;
@@ -133,7 +132,7 @@ class EspeakFfi {
 
   void dispose() {
     if (_ready) {
-      _terminate();
+      _terminate?.call();
       _ready = false;
     }
   }
