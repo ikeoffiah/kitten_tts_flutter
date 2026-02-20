@@ -18,6 +18,9 @@ High-quality offline text-to-speech using the KittenML v0.8 ONNX model with espe
     "#{espeak_dir}/**/*.h",
   ]
 
+  # Only expose the bridge header to avoid duplicate header conflicts
+  s.public_header_files = ["#{espeak_dir}/include/espeak_bridge.h"]
+
   s.pod_target_xcconfig = {
     'DEFINES_MODULE' => 'YES',
     'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386',
