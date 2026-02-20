@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'kitten_tts_flutter'
-  s.version          = '0.1.4'
+  s.version          = '0.1.5'
   s.summary          = 'KittenTTS v0.8 - Offline text-to-speech for Flutter.'
   s.description      = <<-DESC
 High-quality offline text-to-speech using the KittenML v0.8 ONNX model with espeak-ng phonemization.
@@ -18,8 +18,6 @@ High-quality offline text-to-speech using the KittenML v0.8 ONNX model with espe
     "#{espeak_dir}/**/*.h",
   ]
 
-  s.public_header_files = "#{espeak_dir}/include/**/*.h"
-
   s.pod_target_xcconfig = {
     'DEFINES_MODULE' => 'YES',
     'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386',
@@ -28,6 +26,7 @@ High-quality offline text-to-speech using the KittenML v0.8 ONNX model with espe
       "$(PODS_TARGET_SRCROOT)/#{espeak_dir}/include/espeak-ng",
       "$(PODS_TARGET_SRCROOT)/#{espeak_dir}",
       "$(PODS_TARGET_SRCROOT)/#{espeak_dir}/ucd-include",
+      "$(PODS_TARGET_SRCROOT)/#{espeak_dir}/include/ucd",
     ].join(' '),
     'GCC_PREPROCESSOR_DEFINITIONS' => [
       'HAVE_STDINT_H=1',
