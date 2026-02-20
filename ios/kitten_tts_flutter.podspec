@@ -40,7 +40,7 @@ High-quality offline text-to-speech using the KittenML v0.8 ONNX model with espe
       'USE_SPEECHPLAYER=0',
       'PACKAGE_VERSION=\"1.52.0\"',
     ].join(' '),
-    'OTHER_CFLAGS' => "-w -include $(PODS_TARGET_SRCROOT)/#{espeak_dir}/espeak_config.h",
+    'OTHER_CFLAGS' => "-w -include $(PODS_TARGET_SRCROOT)/#{espeak_dir}/config.h",
   }
 
   s.dependency 'Flutter'

@@ -30,7 +30,7 @@ let package = Package(
                 .define("USE_MBROLA", to: "0"),
                 .define("USE_SPEECHPLAYER", to: "0"),
                 .define("PACKAGE_VERSION", to: "\"1.52.0\""),
-                .unsafeFlags(["-w", "-include", "espeak_config.h"]),
+                .unsafeFlags(["-w"]),
             ]
         ),
         .target(
