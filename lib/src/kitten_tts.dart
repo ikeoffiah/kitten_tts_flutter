@@ -143,7 +143,7 @@ class KittenTTS {
   }
 
   /// Split [text] into sentence-aligned chunks suitable for [generateChunk].
-  List<String> splitText(String text, {int maxLen = 400}) =>
+  List<String> splitText(String text, {int maxLen = 200}) =>
       _splitIntoChunks(text, maxLen: maxLen);
 
   /// Release native resources. The instance cannot be used afterwards.
@@ -157,6 +157,8 @@ class KittenTTS {
   // ──────────────────────────────────────────────────────────────────
   // Internal
   // ──────────────────────────────────────────────────────────────────
+
+  static const int _maxTokens = 500;
 
   Future<Float32List> _generateChunk(
     String text, {
@@ -175,6 +177,36 @@ class KittenTTS {
     // ── Token mapping ──
     final tokens = _cleaner.encodeWithBoundary(phonemes);
     debugPrint('[KittenTTS] tokens: ${tokens.length}');
+
+    // ── Guard: split if tokens exceed model capacity ──
+    if (tokens.length > _maxTokens) {
+      debugPrint('[KittenTTS] Token count ${tokens.length} exceeds $_maxTokens, '
+          'splitting chunk further');
+      final mid = text.length ~/ 2;
+      int splitAt = text.indexOf(RegExp(r'[.!?,;:\s]'), mid);
+      if (splitAt < 0 || splitAt == text.length - 1) splitAt = mid;
+      final firstHalf = text.substring(0, splitAt).trim();
+      final secondHalf = text.substring(splitAt).trim();
+
+      final parts = <Float32List>[];
+      if (firstHalf.isNotEmpty) {
+        parts.add(await _generateChunk(firstHalf, voice: voice, speed: speed));
+      }
+      if (secondHalf.isNotEmpty) {
+        parts.add(await _generateChunk(secondHalf, voice: voice, speed: speed));
+      }
+      if (parts.isEmpty) return Float32List(0);
+      if (parts.length == 1) return parts.first;
+
+      final total = parts.fold<int>(0, (s, a) => s + a.length);
+      final out = Float32List(total);
+      var off = 0;
+      for (final p in parts) {
+        out.setAll(off, p);
+        off += p.length;
+      }
+      return out;
+    }
 
     // ── Voice embedding ──
     final embKey = _voiceToEmbeddingKey[voice] ?? 'expr-voice-2-m';
@@ -255,7 +287,7 @@ class KittenTTS {
 
   // ── Helpers ──
 
-  List<String> _splitIntoChunks(String text, {int maxLen = 400}) {
+  List<String> _splitIntoChunks(String text, {int maxLen = 200}) {
     final sentences = text.split(RegExp(r'(?<=[.!?])\s+'));
     final chunks = <String>[];
     final buf = StringBuffer();
