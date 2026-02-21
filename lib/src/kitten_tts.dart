@@ -13,6 +13,7 @@ const List<String> kittenVoices = [
   'Bella', 'Jasper', 'Luna', 'Bruno', 'Rosie', 'Hugo', 'Kiki', 'Leo',
 ];
 
+/// Map of voice names to their embedding keys.
 const Map<String, String> _voiceToEmbeddingKey = {
   'Bella': 'expr-voice-2-f',
   'Jasper': 'expr-voice-2-m',
