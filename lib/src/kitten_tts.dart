@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_onnxruntime/flutter_onnxruntime.dart';
 
@@ -189,7 +191,7 @@ class KittenTTS {
 
     // ── ONNX inference ──
     final inputIds = await OrtValue.fromList(
-      tokens.map((t) => BigInt.from(t)).toList(),
+      Int64List.fromList(tokens),
       [1, tokens.length],
     );
     final styleTensor = await OrtValue.fromList(
