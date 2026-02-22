@@ -1,0 +1,35 @@
+name: kitten_tts_flutter
+description: "KittenTTS v0.8 - High-quality offline text-to-speech for Flutter using KittenML's ONNX model."
+version: 0.1.0
+homepage: https://github.com/KittenML/KittenTTS
+
+environment:
+  sdk: ^3.10.8
+  flutter: '>=3.3.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  plugin_platform_interface: ^2.0.2
+  flutter_onnxruntime: ^1.6.0
+  archive: ^3.6.1
+  path: ^1.9.1
+  path_provider: ^2.1.5
+  http: ^1.2.2
+  ffi: ^2.1.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: com.example.kitten_tts_flutter
+        pluginClass: KittenTtsFlutterPlugin
+      ios:
+        pluginClass: KittenTtsFlutterPlugin
+      macos:
+        pluginClass: KittenTtsFlutterPlugin

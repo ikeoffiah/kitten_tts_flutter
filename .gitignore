@@ -1,0 +1,10 @@
+.DS_Store
+.dart_tool/
+.packages
+.pub/
+build/
+pubspec.lock
+
+# Keep third_party/espeak-ng source (needed by podspec/CMake for compilation)
+# Run scripts/setup_espeak.sh to populate if missing
+third_party/espeak-ng-*.tar.gz
