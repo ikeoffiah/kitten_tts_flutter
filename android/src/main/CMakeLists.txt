@@ -21,6 +21,7 @@ file(GLOB UCD_SOURCES
 add_library(espeak-ng SHARED ${ESPEAK_SOURCES} ${UCD_SOURCES})
 
 target_include_directories(espeak-ng PUBLIC
+  "${CMAKE_CURRENT_SOURCE_DIR}"
   "${ESPEAK_ROOT}/src/include"
   "${ESPEAK_ROOT}/src/include/espeak-ng"
   "${ESPEAK_ROOT}/src/libespeak-ng"
