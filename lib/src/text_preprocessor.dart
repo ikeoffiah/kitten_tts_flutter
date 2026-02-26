@@ -272,8 +272,9 @@ class TextPreprocessor {
         final mins = int.parse(m[2]!);
         final suffix = m[3] != null ? ' ${m[3]!.toLowerCase()}' : '';
         final hWords = numberToWords(h);
-        if (mins == 0)
+        if (mins == 0) {
           return m[3] != null ? '$hWords$suffix' : '$hWords hundred$suffix';
+        }
         if (mins < 10) return '$hWords oh ${numberToWords(mins)}$suffix';
         return '$hWords ${numberToWords(mins)}$suffix';
       },
