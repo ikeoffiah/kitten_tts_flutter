@@ -2,32 +2,31 @@ import 'dart:ffi';
 import 'dart:io';
 import 'package:ffi/ffi.dart';
 
-typedef _EspeakInitializeC = Int32 Function(
-  Int32 output,
-  Int32 buflength,
-  Pointer<Utf8> path,
-  Int32 options,
-);
-typedef _EspeakInitializeDart = int Function(
-  int output,
-  int buflength,
-  Pointer<Utf8> path,
-  int options,
-);
+typedef _EspeakInitializeC =
+    Int32 Function(
+      Int32 output,
+      Int32 buflength,
+      Pointer<Utf8> path,
+      Int32 options,
+    );
+typedef _EspeakInitializeDart =
+    int Function(int output, int buflength, Pointer<Utf8> path, int options);
 
 typedef _EspeakSetVoiceByNameC = Int32 Function(Pointer<Utf8> name);
 typedef _EspeakSetVoiceByNameDart = int Function(Pointer<Utf8> name);
 
-typedef _EspeakTextToPhonemesC = Pointer<Utf8> Function(
-  Pointer<Pointer<Void>> textptr,
-  Int32 textmode,
-  Int32 phonememode,
-);
-typedef _EspeakTextToPhonemesDart = Pointer<Utf8> Function(
-  Pointer<Pointer<Void>> textptr,
-  int textmode,
-  int phonememode,
-);
+typedef _EspeakTextToPhonemesC =
+    Pointer<Utf8> Function(
+      Pointer<Pointer<Void>> textptr,
+      Int32 textmode,
+      Int32 phonememode,
+    );
+typedef _EspeakTextToPhonemesDart =
+    Pointer<Utf8> Function(
+      Pointer<Pointer<Void>> textptr,
+      int textmode,
+      int phonememode,
+    );
 
 typedef _EspeakTerminateC = Int32 Function();
 typedef _EspeakTerminateDart = int Function();
@@ -60,18 +59,23 @@ class EspeakFfi {
     } else if (Platform.isWindows) {
       _lib = DynamicLibrary.open('espeak-ng.dll');
     } else {
-      throw UnsupportedError('espeak-ng not supported on ${Platform.operatingSystem}');
+      throw UnsupportedError(
+        'espeak-ng not supported on ${Platform.operatingSystem}',
+      );
     }
 
-    _initialize = _lib!.lookupFunction<_EspeakInitializeC, _EspeakInitializeDart>(
-      'espeak_Initialize',
-    );
-    _setVoiceByName = _lib!.lookupFunction<_EspeakSetVoiceByNameC, _EspeakSetVoiceByNameDart>(
-      'espeak_SetVoiceByName',
-    );
-    _textToPhonemes = _lib!.lookupFunction<_EspeakTextToPhonemesC, _EspeakTextToPhonemesDart>(
-      'espeak_TextToPhonemes',
-    );
+    _initialize = _lib!
+        .lookupFunction<_EspeakInitializeC, _EspeakInitializeDart>(
+          'espeak_Initialize',
+        );
+    _setVoiceByName = _lib!
+        .lookupFunction<_EspeakSetVoiceByNameC, _EspeakSetVoiceByNameDart>(
+          'espeak_SetVoiceByName',
+        );
+    _textToPhonemes = _lib!
+        .lookupFunction<_EspeakTextToPhonemesC, _EspeakTextToPhonemesDart>(
+          'espeak_TextToPhonemes',
+        );
     _terminate = _lib!.lookupFunction<_EspeakTerminateC, _EspeakTerminateDart>(
       'espeak_Terminate',
     );

@@ -7,7 +7,8 @@ import 'package:path_provider/path_provider.dart';
 
 /// Downloads and manages KittenTTS model files from HuggingFace.
 class ModelManager {
-  static const _hfBase = 'https://huggingface.co/KittenML/kitten-tts-nano-0.8-int8/resolve/main';
+  static const _hfBase =
+      'https://huggingface.co/KittenML/kitten-tts-nano-0.8-int8/resolve/main';
   static const _modelDirName = 'kitten-tts-nano-0.8-int8';
   static const _readyMarker = '.ready';
 
@@ -88,7 +89,9 @@ class ModelManager {
         ..maxRedirects = 5;
       final response = await client.send(request);
       if (response.statusCode != 200) {
-        throw Exception('Download $fileName failed: HTTP ${response.statusCode}');
+        throw Exception(
+          'Download $fileName failed: HTTP ${response.statusCode}',
+        );
       }
 
       final total = response.contentLength ?? 0;
@@ -102,7 +105,10 @@ class ModelManager {
         if (total > 0) {
           final fileProgress = received / total;
           final overall = progressBase + fileProgress * progressRange;
-          onProgress?.call(overall, 'Downloading $fileName... ${(fileProgress * 100).toStringAsFixed(0)}%');
+          onProgress?.call(
+            overall,
+            'Downloading $fileName... ${(fileProgress * 100).toStringAsFixed(0)}%',
+          );
         }
       }
       await sink.close();
@@ -111,7 +117,10 @@ class ModelManager {
     }
   }
 
-  Future<void> _ensureEspeakData(String baseDir, void Function(double, String)? onProgress) async {
+  Future<void> _ensureEspeakData(
+    String baseDir,
+    void Function(double, String)? onProgress,
+  ) async {
     final espeakDir = Directory(p.join(baseDir, 'espeak-ng-data'));
     if (espeakDir.existsSync() && espeakDir.listSync().isNotEmpty) {
       debugPrint('[ModelManager] espeak-ng-data already exists');
@@ -119,7 +128,8 @@ class ModelManager {
     }
 
     onProgress?.call(0.7, 'Downloading espeak-ng data...');
-    const espeakUrl = 'https://github.com/k2-fsa/sherpa-onnx/releases/download/tts-models/espeak-ng-data.tar.bz2';
+    const espeakUrl =
+        'https://github.com/k2-fsa/sherpa-onnx/releases/download/tts-models/espeak-ng-data.tar.bz2';
 
     final client = http.Client();
     Uint8List archiveBytes;
@@ -135,7 +145,10 @@ class ModelManager {
         chunks.addAll(chunk);
         received += chunk.length;
         if (total > 0) {
-          onProgress?.call(0.7 + (received / total) * 0.15, 'Downloading espeak-ng data... ${(received / total * 100).toStringAsFixed(0)}%');
+          onProgress?.call(
+            0.7 + (received / total) * 0.15,
+            'Downloading espeak-ng data... ${(received / total * 100).toStringAsFixed(0)}%',
+          );
         }
       }
       archiveBytes = Uint8List.fromList(chunks);

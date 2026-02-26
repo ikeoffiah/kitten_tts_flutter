@@ -12,7 +12,9 @@ class NpzReader {
     for (final file in archive) {
       if (file.isFile && file.name.endsWith('.npy')) {
         final name = file.name.replaceAll('.npy', '');
-        _arrays[name] = NpyArray.fromBytes(Uint8List.fromList(file.content as List<int>));
+        _arrays[name] = NpyArray.fromBytes(
+          Uint8List.fromList(file.content as List<int>),
+        );
       }
     }
   }
@@ -38,7 +40,8 @@ class NpyArray {
     // NPY format: 6-byte magic (\x93NUMPY), 1-byte major, 1-byte minor,
     // 2-byte header length (LE for v1) or 4-byte (v2), then ASCII header dict.
 
-    if (bytes[0] != 0x93 || String.fromCharCodes(bytes.sublist(1, 6)) != 'NUMPY') {
+    if (bytes[0] != 0x93 ||
+        String.fromCharCodes(bytes.sublist(1, 6)) != 'NUMPY') {
       throw FormatException('Not a valid NPY file');
     }
 
@@ -47,14 +50,24 @@ class NpyArray {
     int headerStart;
 
     if (major == 1) {
-      headerLen = ByteData.sublistView(bytes, 8, 10).getUint16(0, Endian.little);
+      headerLen = ByteData.sublistView(
+        bytes,
+        8,
+        10,
+      ).getUint16(0, Endian.little);
       headerStart = 10;
     } else {
-      headerLen = ByteData.sublistView(bytes, 8, 12).getUint32(0, Endian.little);
+      headerLen = ByteData.sublistView(
+        bytes,
+        8,
+        12,
+      ).getUint32(0, Endian.little);
       headerStart = 12;
     }
 
-    final headerStr = String.fromCharCodes(bytes.sublist(headerStart, headerStart + headerLen));
+    final headerStr = String.fromCharCodes(
+      bytes.sublist(headerStart, headerStart + headerLen),
+    );
     final dataStart = headerStart + headerLen;
 
     final shape = _parseShape(headerStr);
@@ -64,9 +77,17 @@ class NpyArray {
 
     Float32List floatData;
     if (descr == '<f4' || descr == 'float32') {
-      floatData = Float32List.view(dataBytes.buffer, dataBytes.offsetInBytes, dataBytes.lengthInBytes ~/ 4);
+      floatData = Float32List.view(
+        dataBytes.buffer,
+        dataBytes.offsetInBytes,
+        dataBytes.lengthInBytes ~/ 4,
+      );
     } else if (descr == '<f8' || descr == 'float64') {
-      final f64 = Float64List.view(dataBytes.buffer, dataBytes.offsetInBytes, dataBytes.lengthInBytes ~/ 8);
+      final f64 = Float64List.view(
+        dataBytes.buffer,
+        dataBytes.offsetInBytes,
+        dataBytes.lengthInBytes ~/ 8,
+      );
       floatData = Float32List(f64.length);
       for (var i = 0; i < f64.length; i++) {
         floatData[i] = f64[i].toDouble();
@@ -95,7 +116,12 @@ class NpyArray {
     if (match == null) return [];
     final inner = match.group(1)!.trim();
     if (inner.isEmpty) return [];
-    return inner.split(',').map((s) => s.trim()).where((s) => s.isNotEmpty).map(int.parse).toList();
+    return inner
+        .split(',')
+        .map((s) => s.trim())
+        .where((s) => s.isNotEmpty)
+        .map(int.parse)
+        .toList();
   }
 
   static String _parseDescr(String header) {

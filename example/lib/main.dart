@@ -40,7 +40,8 @@ class TTSScreen extends StatefulWidget {
 class _TTSScreenState extends State<TTSScreen> {
   final KittenTTS _tts = KittenTTS();
   final TextEditingController _textCtrl = TextEditingController(
-    text: 'Hello! This is KittenTTS, a high-quality offline text-to-speech engine. '
+    text:
+        'Hello! This is KittenTTS, a high-quality offline text-to-speech engine. '
         'It runs entirely on your device, no internet required.',
   );
 
@@ -92,7 +93,8 @@ class _TTSScreenState extends State<TTSScreen> {
 
       setState(() {
         _lastAudio = audio;
-        _status = 'Generated ${audio.length} samples '
+        _status =
+            'Generated ${audio.length} samples '
             '(${(audio.length / _tts.sampleRate).toStringAsFixed(1)}s)';
         _isGenerating = false;
       });
@@ -114,9 +116,9 @@ class _TTSScreenState extends State<TTSScreen> {
     await File(path).writeAsBytes(wavBytes);
 
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Saved to $path')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Saved to $path')));
     }
   }
 
@@ -176,10 +178,7 @@ class _TTSScreenState extends State<TTSScreen> {
     final cs = Theme.of(context).colorScheme;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('KittenTTS Demo'),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: const Text('KittenTTS Demo'), centerTitle: true),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -192,13 +191,19 @@ class _TTSScreenState extends State<TTSScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Status', style: Theme.of(context).textTheme.titleSmall),
+                    Text(
+                      'Status',
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
                     const SizedBox(height: 8),
                     if (!_tts.isInitialized && _downloadProgress < 1.0) ...[
                       LinearProgressIndicator(value: _downloadProgress),
                       const SizedBox(height: 8),
                     ],
-                    Text(_status, style: Theme.of(context).textTheme.bodyMedium),
+                    Text(
+                      _status,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
                   ],
                 ),
               ),
@@ -227,10 +232,9 @@ class _TTSScreenState extends State<TTSScreen> {
                       border: OutlineInputBorder(),
                       labelText: 'Voice',
                     ),
-                    items: kittenVoices.map((v) => DropdownMenuItem(
-                      value: v,
-                      child: Text(v),
-                    )).toList(),
+                    items: kittenVoices
+                        .map((v) => DropdownMenuItem(value: v, child: Text(v)))
+                        .toList(),
                     onChanged: (v) {
                       if (v != null) setState(() => _selectedVoice = v);
                     },
@@ -258,11 +262,17 @@ class _TTSScreenState extends State<TTSScreen> {
 
             // Generate button
             FilledButton.icon(
-              onPressed: _tts.isInitialized && !_isGenerating ? _generate : null,
+              onPressed: _tts.isInitialized && !_isGenerating
+                  ? _generate
+                  : null,
               icon: _isGenerating
                   ? const SizedBox(
-                      width: 18, height: 18,
-                      child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                      width: 18,
+                      height: 18,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: Colors.white,
+                      ),
                     )
                   : const Icon(Icons.record_voice_over),
               label: Text(_isGenerating ? 'Generating...' : 'Generate Speech'),
@@ -283,9 +293,9 @@ class _TTSScreenState extends State<TTSScreen> {
                 '${_lastAudio!.length} samples / '
                 '${(_lastAudio!.length / _tts.sampleRate).toStringAsFixed(1)}s / '
                 '${_tts.sampleRate} Hz',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: cs.onSurfaceVariant,
-                ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.copyWith(color: cs.onSurfaceVariant),
                 textAlign: TextAlign.center,
               ),
             ],

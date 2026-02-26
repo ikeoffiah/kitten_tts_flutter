@@ -26,21 +26,54 @@ class TextPreprocessor {
   // ── Number to words ──
 
   static const _ones = [
-    '', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine',
-    'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen',
-    'seventeen', 'eighteen', 'nineteen',
+    '',
+    'one',
+    'two',
+    'three',
+    'four',
+    'five',
+    'six',
+    'seven',
+    'eight',
+    'nine',
+    'ten',
+    'eleven',
+    'twelve',
+    'thirteen',
+    'fourteen',
+    'fifteen',
+    'sixteen',
+    'seventeen',
+    'eighteen',
+    'nineteen',
   ];
 
   static const _tens = [
-    '', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety',
+    '',
+    '',
+    'twenty',
+    'thirty',
+    'forty',
+    'fifty',
+    'sixty',
+    'seventy',
+    'eighty',
+    'ninety',
   ];
 
   static const _scales = ['', 'thousand', 'million', 'billion', 'trillion'];
 
   static const _ordinalExceptions = {
-    'one': 'first', 'two': 'second', 'three': 'third', 'four': 'fourth',
-    'five': 'fifth', 'six': 'sixth', 'seven': 'seventh', 'eight': 'eighth',
-    'nine': 'ninth', 'twelve': 'twelfth',
+    'one': 'first',
+    'two': 'second',
+    'three': 'third',
+    'four': 'fourth',
+    'five': 'fifth',
+    'six': 'sixth',
+    'seven': 'seventh',
+    'eight': 'eighth',
+    'nine': 'ninth',
+    'twelve': 'twelfth',
   };
 
   static String _threeDigitsToWords(int n) {
@@ -85,9 +118,14 @@ class TextPreprocessor {
     var s = negative ? value.substring(1) : value;
     if (s.contains('.')) {
       final parts = s.split('.');
-      final intWords = numberToWords(int.parse(parts[0].isEmpty ? '0' : parts[0]));
+      final intWords = numberToWords(
+        int.parse(parts[0].isEmpty ? '0' : parts[0]),
+      );
       final digitNames = ['zero', ..._ones.sublist(1)];
-      final decWords = parts[1].split('').map((d) => digitNames[int.parse(d)]).join(' ');
+      final decWords = parts[1]
+          .split('')
+          .map((d) => digitNames[int.parse(d)])
+          .join(' ');
       final result = '$intWords point $decWords';
       return negative ? 'negative $result' : result;
     }
@@ -134,30 +172,61 @@ class TextPreprocessor {
 
   String _expandContractions(String text) {
     const map = {
-      r"\bcan't\b": 'cannot', r"\bwon't\b": 'will not',
-      r"\bain't\b": 'is not', r"\blet's\b": 'let us',
+      r"\bcan't\b": 'cannot',
+      r"\bwon't\b": 'will not',
+      r"\bain't\b": 'is not',
+      r"\blet's\b": 'let us',
       r"\bit's\b": 'it is',
     };
     for (final e in map.entries) {
       text = text.replaceAll(RegExp(e.key, caseSensitive: false), e.value);
     }
-    text = text.replaceAllMapped(RegExp(r"\b(\w+)n't\b", caseSensitive: false), (m) => '${m[1]} not');
-    text = text.replaceAllMapped(RegExp(r"\b(\w+)'re\b", caseSensitive: false), (m) => '${m[1]} are');
-    text = text.replaceAllMapped(RegExp(r"\b(\w+)'ve\b", caseSensitive: false), (m) => '${m[1]} have');
-    text = text.replaceAllMapped(RegExp(r"\b(\w+)'ll\b", caseSensitive: false), (m) => '${m[1]} will');
-    text = text.replaceAllMapped(RegExp(r"\b(\w+)'d\b", caseSensitive: false), (m) => '${m[1]} would');
-    text = text.replaceAllMapped(RegExp(r"\b(\w+)'m\b", caseSensitive: false), (m) => '${m[1]} am');
+    text = text.replaceAllMapped(
+      RegExp(r"\b(\w+)n't\b", caseSensitive: false),
+      (m) => '${m[1]} not',
+    );
+    text = text.replaceAllMapped(
+      RegExp(r"\b(\w+)'re\b", caseSensitive: false),
+      (m) => '${m[1]} are',
+    );
+    text = text.replaceAllMapped(
+      RegExp(r"\b(\w+)'ve\b", caseSensitive: false),
+      (m) => '${m[1]} have',
+    );
+    text = text.replaceAllMapped(
+      RegExp(r"\b(\w+)'ll\b", caseSensitive: false),
+      (m) => '${m[1]} will',
+    );
+    text = text.replaceAllMapped(
+      RegExp(r"\b(\w+)'d\b", caseSensitive: false),
+      (m) => '${m[1]} would',
+    );
+    text = text.replaceAllMapped(
+      RegExp(r"\b(\w+)'m\b", caseSensitive: false),
+      (m) => '${m[1]} am',
+    );
     return text;
   }
 
   String _normalizeLeadingDecimals(String text) {
-    text = text.replaceAllMapped(RegExp(r'(?<!\d)(-)\.([\d])'), (m) => '${m[1]}0.${m[2]}');
-    return text.replaceAllMapped(RegExp(r'(?<!\d)\.([\d])'), (m) => '0.${m[1]}');
+    text = text.replaceAllMapped(
+      RegExp(r'(?<!\d)(-)\.([\d])'),
+      (m) => '${m[1]}0.${m[2]}',
+    );
+    return text.replaceAllMapped(
+      RegExp(r'(?<!\d)\.([\d])'),
+      (m) => '0.${m[1]}',
+    );
   }
 
   String _expandCurrency(String text) {
     const symbols = {r'$': 'dollar', '€': 'euro', '£': 'pound', '¥': 'yen'};
-    const scaleMap = {'K': 'thousand', 'M': 'million', 'B': 'billion', 'T': 'trillion'};
+    const scaleMap = {
+      'K': 'thousand',
+      'M': 'million',
+      'B': 'billion',
+      'T': 'trillion',
+    };
 
     return text.replaceAllMapped(
       RegExp(r'([\$€£¥])\s*([\d,]+(?:\.\d+)?)\s*([KMBT])?(?![a-zA-Z\d])'),
@@ -166,7 +235,9 @@ class TextPreprocessor {
         final raw = m[2]!.replaceAll(',', '');
         final suffix = m[3];
         if (suffix != null) {
-          final num = raw.contains('.') ? _floatToWords(raw) : numberToWords(int.parse(raw));
+          final num = raw.contains('.')
+              ? _floatToWords(raw)
+              : numberToWords(int.parse(raw));
           return '$num ${scaleMap[suffix]} ${unit}s';
         }
         if (raw.contains('.')) {
@@ -184,14 +255,13 @@ class TextPreprocessor {
   }
 
   String _expandPercentages(String text) {
-    return text.replaceAllMapped(
-      RegExp(r'(-?[\d,]+(?:\.\d+)?)\s*%'),
-      (m) {
-        final raw = m[1]!.replaceAll(',', '');
-        final w = raw.contains('.') ? _floatToWords(raw) : numberToWords(int.parse(raw));
-        return '$w percent';
-      },
-    );
+    return text.replaceAllMapped(RegExp(r'(-?[\d,]+(?:\.\d+)?)\s*%'), (m) {
+      final raw = m[1]!.replaceAll(',', '');
+      final w = raw.contains('.')
+          ? _floatToWords(raw)
+          : numberToWords(int.parse(raw));
+      return '$w percent';
+    });
   }
 
   String _expandTime(String text) {
@@ -202,7 +272,8 @@ class TextPreprocessor {
         final mins = int.parse(m[2]!);
         final suffix = m[3] != null ? ' ${m[3]!.toLowerCase()}' : '';
         final hWords = numberToWords(h);
-        if (mins == 0) return m[3] != null ? '$hWords$suffix' : '$hWords hundred$suffix';
+        if (mins == 0)
+          return m[3] != null ? '$hWords$suffix' : '$hWords hundred$suffix';
         if (mins < 10) return '$hWords oh ${numberToWords(mins)}$suffix';
         return '$hWords ${numberToWords(mins)}$suffix';
       },
@@ -218,16 +289,28 @@ class TextPreprocessor {
 
   String _expandUnits(String text) {
     const unitMap = {
-      'km': 'kilometers', 'kg': 'kilograms', 'mg': 'milligrams', 'ml': 'milliliters',
-      'gb': 'gigabytes', 'mb': 'megabytes', 'kb': 'kilobytes', 'hz': 'hertz',
-      'mph': 'miles per hour', 'ms': 'milliseconds',
+      'km': 'kilometers',
+      'kg': 'kilograms',
+      'mg': 'milligrams',
+      'ml': 'milliliters',
+      'gb': 'gigabytes',
+      'mb': 'megabytes',
+      'kb': 'kilobytes',
+      'hz': 'hertz',
+      'mph': 'miles per hour',
+      'ms': 'milliseconds',
     };
     return text.replaceAllMapped(
-      RegExp(r'(\d+(?:\.\d+)?)\s*(km|kg|mg|ml|gb|mb|kb|hz|mph|ms)\b', caseSensitive: false),
+      RegExp(
+        r'(\d+(?:\.\d+)?)\s*(km|kg|mg|ml|gb|mb|kb|hz|mph|ms)\b',
+        caseSensitive: false,
+      ),
       (m) {
         final raw = m[1]!;
         final unit = unitMap[m[2]!.toLowerCase()] ?? m[2]!;
-        final num = raw.contains('.') ? _floatToWords(raw) : numberToWords(int.parse(raw));
+        final num = raw.contains('.')
+            ? _floatToWords(raw)
+            : numberToWords(int.parse(raw));
         return '$num $unit';
       },
     );
@@ -240,24 +323,39 @@ class TextPreprocessor {
       if (den == 0) return m[0]!;
       final numW = numberToWords(num);
       String denomW;
-      if (den == 2) { denomW = num == 1 ? 'half' : 'halves'; }
-      else if (den == 4) { denomW = num == 1 ? 'quarter' : 'quarters'; }
-      else { denomW = _ordinalSuffix(den); if (num != 1) denomW += 's'; }
+      if (den == 2) {
+        denomW = num == 1 ? 'half' : 'halves';
+      } else if (den == 4) {
+        denomW = num == 1 ? 'quarter' : 'quarters';
+      } else {
+        denomW = _ordinalSuffix(den);
+        if (num != 1) denomW += 's';
+      }
       return '$numW $denomW';
     });
   }
 
   String _expandPhoneNumbers(String text) {
-    String digits(String s) => s.split('').map((c) => _ones[int.parse(c)].isEmpty ? 'zero' : _ones[int.parse(c)]).join(' ');
-    text = text.replaceAllMapped(RegExp(r'\b(\d{3})-(\d{3})-(\d{4})\b'), (m) => '${digits(m[1]!)} ${digits(m[2]!)} ${digits(m[3]!)}');
-    text = text.replaceAllMapped(RegExp(r'\b(\d{3})-(\d{4})\b'), (m) => '${digits(m[1]!)} ${digits(m[2]!)}');
+    String digits(String s) => s
+        .split('')
+        .map((c) => _ones[int.parse(c)].isEmpty ? 'zero' : _ones[int.parse(c)])
+        .join(' ');
+    text = text.replaceAllMapped(
+      RegExp(r'\b(\d{3})-(\d{3})-(\d{4})\b'),
+      (m) => '${digits(m[1]!)} ${digits(m[2]!)} ${digits(m[3]!)}',
+    );
+    text = text.replaceAllMapped(
+      RegExp(r'\b(\d{3})-(\d{4})\b'),
+      (m) => '${digits(m[1]!)} ${digits(m[2]!)}',
+    );
     return text;
   }
 
   String _expandRanges(String text) {
     return text.replaceAllMapped(
       RegExp(r'(?<!\w)(\d+)-(\d+)(?!\w)'),
-      (m) => '${numberToWords(int.parse(m[1]!))} to ${numberToWords(int.parse(m[2]!))}',
+      (m) =>
+          '${numberToWords(int.parse(m[1]!))} to ${numberToWords(int.parse(m[2]!))}',
     );
   }
 
@@ -269,19 +367,19 @@ class TextPreprocessor {
   }
 
   String _replaceNumbers(String text) {
-    return text.replaceAllMapped(
-      RegExp(r'(?<![a-zA-Z])-?[\d,]+(?:\.\d+)?'),
-      (m) {
-        final raw = m[0]!.replaceAll(',', '');
-        try {
-          if (raw.contains('.')) return _floatToWords(raw);
-          return numberToWords(int.parse(raw));
-        } catch (_) {
-          return m[0]!;
-        }
-      },
-    );
+    return text.replaceAllMapped(RegExp(r'(?<![a-zA-Z])-?[\d,]+(?:\.\d+)?'), (
+      m,
+    ) {
+      final raw = m[0]!.replaceAll(',', '');
+      try {
+        if (raw.contains('.')) return _floatToWords(raw);
+        return numberToWords(int.parse(raw));
+      } catch (_) {
+        return m[0]!;
+      }
+    });
   }
 
-  String _normalizeWhitespace(String text) => text.replaceAll(RegExp(r'\s+'), ' ').trim();
+  String _normalizeWhitespace(String text) =>
+      text.replaceAll(RegExp(r'\s+'), ' ').trim();
 }

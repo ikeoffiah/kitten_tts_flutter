@@ -23,9 +23,6 @@ void main() {
 
   test('generate throws when not initialized', () {
     final tts = KittenTTS();
-    expect(
-      () => tts.generate('hello'),
-      throwsA(isA<StateError>()),
-    );
+    expect(() => tts.generate('hello'), throwsA(isA<StateError>()));
   });
 }

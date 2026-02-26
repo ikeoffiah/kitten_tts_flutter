@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter_onnxruntime/flutter_onnxruntime.dart';
 
@@ -10,7 +9,14 @@ import 'text_preprocessor.dart';
 
 /// Voice names available in KittenTTS
 const List<String> kittenVoices = [
-  'Bella', 'Jasper', 'Luna', 'Bruno', 'Rosie', 'Hugo', 'Kiki', 'Leo',
+  'Bella',
+  'Jasper',
+  'Luna',
+  'Bruno',
+  'Rosie',
+  'Hugo',
+  'Kiki',
+  'Leo',
 ];
 
 /// Map of voice names to their embedding keys.
@@ -26,10 +32,14 @@ const Map<String, String> _voiceToEmbeddingKey = {
 };
 
 const Map<String, double> _speedPriors = {
-  'expr-voice-2-f': 0.8, 'expr-voice-2-m': 0.8,
-  'expr-voice-3-m': 0.8, 'expr-voice-3-f': 0.8,
-  'expr-voice-4-m': 0.9, 'expr-voice-4-f': 0.8,
-  'expr-voice-5-m': 0.8, 'expr-voice-5-f': 0.8,
+  'expr-voice-2-f': 0.8,
+  'expr-voice-2-m': 0.8,
+  'expr-voice-3-m': 0.8,
+  'expr-voice-3-f': 0.8,
+  'expr-voice-4-m': 0.9,
+  'expr-voice-4-f': 0.8,
+  'expr-voice-5-m': 0.8,
+  'expr-voice-5-f': 0.8,
 };
 
 /// KittenTTS - High-quality offline text-to-speech for Flutter.
@@ -180,8 +190,10 @@ class KittenTTS {
 
     // ── Guard: split if tokens exceed model capacity ──
     if (tokens.length > _maxTokens) {
-      debugPrint('[KittenTTS] Token count ${tokens.length} exceeds $_maxTokens, '
-          'splitting chunk further');
+      debugPrint(
+        '[KittenTTS] Token count ${tokens.length} exceeds $_maxTokens, '
+        'splitting chunk further',
+      );
       final mid = text.length ~/ 2;
       int splitAt = text.indexOf(RegExp(r'[.!?,;:\s]'), mid);
       if (splitAt < 0 || splitAt == text.length - 1) splitAt = mid;
@@ -212,8 +224,10 @@ class KittenTTS {
     final embKey = _voiceToEmbeddingKey[voice] ?? 'expr-voice-2-m';
     final embArray = _voices![embKey];
     if (embArray == null) {
-      throw StateError('Voice "$voice" ($embKey) not found in voices.npz. '
-          'Available: ${_voices!.keys}');
+      throw StateError(
+        'Voice "$voice" ($embKey) not found in voices.npz. '
+        'Available: ${_voices!.keys}',
+      );
     }
     final refIdx = text.length.clamp(0, embArray.length - 1);
     final style = embArray.row(refIdx);
@@ -222,18 +236,15 @@ class KittenTTS {
     final effectiveSpeed = speed * prior;
 
     // ── ONNX inference ──
-    final inputIds = await OrtValue.fromList(
-      Int64List.fromList(tokens),
-      [1, tokens.length],
-    );
-    final styleTensor = await OrtValue.fromList(
-      style.toList(),
-      [1, style.length],
-    );
-    final speedTensor = await OrtValue.fromList(
-      [effectiveSpeed],
-      [1],
-    );
+    final inputIds = await OrtValue.fromList(Int64List.fromList(tokens), [
+      1,
+      tokens.length,
+    ]);
+    final styleTensor = await OrtValue.fromList(style.toList(), [
+      1,
+      style.length,
+    ]);
+    final speedTensor = await OrtValue.fromList([effectiveSpeed], [1]);
 
     final outputs = await _session!.run({
       'input_ids': inputIds,
@@ -280,8 +291,10 @@ class KittenTTS {
       audio = Float32List.sublistView(audio, 0, audio.length - 5000);
     }
 
-    debugPrint('[KittenTTS] generated ${audio.length} samples '
-        '(${(audio.length / sampleRate).toStringAsFixed(1)}s)');
+    debugPrint(
+      '[KittenTTS] generated ${audio.length} samples '
+      '(${(audio.length / sampleRate).toStringAsFixed(1)}s)',
+    );
     return audio;
   }
 
