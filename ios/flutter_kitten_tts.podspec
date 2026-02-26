@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
-  s.name             = 'kitten_tts_flutter'
-  s.version          = '0.1.5'
+  s.name             = 'flutter_kitten_tts'
+  s.version          = '0.0.1'
   s.summary          = 'KittenTTS v0.8 - Offline text-to-speech for Flutter.'
   s.description      = <<-DESC
 High-quality offline text-to-speech using the KittenML v0.8 ONNX model with espeak-ng phonemization.
