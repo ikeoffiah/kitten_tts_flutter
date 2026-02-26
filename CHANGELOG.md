@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.0.2
+
+* Dependency updates: added `dependency_overrides` for newer transitive packages (characters, material_color_utilities, meta).
+
 ## 0.0.1
 
 * Initial release of KittenTTS Flutter plugin.

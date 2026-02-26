@@ -27,7 +27,7 @@ Text → TextPreprocessor → espeak-ng (FFI) → TextCleaner → ONNX Runtime �
 
 ```yaml
 dependencies:
-  flutter_kitten_tts: ^0.0.1
+  flutter_kitten_tts: ^0.0.2
 ```
 
 **From Git** (latest):
@@ -53,8 +53,8 @@ dependencies:
 Android builds espeak-ng from source. The package (both the [GitHub repo](https://github.com/ikeoffiah/kitten_tts_flutter) and the pub.dev publish) **includes** `third_party/espeak-ng`, so you do **not** need to run any script—add the dependency and build. **iOS/macOS** use bundled sources in the plugin and also require no extra steps.
 
 > **If you see Android build errors** such as "espeak-ng source not found" or missing espeak-ng files, run the setup script once from the plugin directory (e.g. from your pub cache after `flutter pub get`):  
-> `bash "$(flutter pub cache path)/hosted/pub.dev/flutter_kitten_tts-0.0.1/scripts/setup_espeak.sh"`  
-> (Replace `0.0.1` with your installed version, or for a git dependency use `.../git/kitten_tts_flutter-*/scripts/setup_espeak.sh`.) This downloads espeak-ng 1.52.0 into `third_party/espeak-ng/`.
+> `bash "$(flutter pub cache path)/hosted/pub.dev/flutter_kitten_tts-0.0.2/scripts/setup_espeak.sh"`  
+> (Replace `0.0.2` with your installed version, or for a git dependency use `.../git/kitten_tts_flutter-*/scripts/setup_espeak.sh`.) This downloads espeak-ng 1.52.0 into `third_party/espeak-ng/`.
 
 ### 3. Platform configuration
 
