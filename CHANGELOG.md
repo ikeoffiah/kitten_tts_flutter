@@ -2,9 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.0.3
+
+* Removed `dependency_overrides` from pubspec.yaml so the package uses normal dependency resolution (recommended for published packages; avoids pub validation hints).
+
 ## 0.0.2
 
-* Dependency updates: added `dependency_overrides` for newer transitive packages (characters, material_color_utilities, meta).
+* Dependency updates.
 
 ## 0.0.1
 
