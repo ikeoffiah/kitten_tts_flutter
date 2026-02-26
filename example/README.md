@@ -1,6 +1,6 @@
-# kitten_tts_flutter_example
+# flutter_kitten_tts_example
 
-Demonstrates how to use the kitten_tts_flutter plugin.
+Demonstrates how to use the flutter_kitten_tts plugin.
 
 ## Getting Started
 

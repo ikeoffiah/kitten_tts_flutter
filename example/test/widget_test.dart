@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:kitten_tts_flutter_example/main.dart';
+import 'package:flutter_kitten_tts_example/main.dart';
 
 void main() {
   testWidgets('App loads', (WidgetTester tester) async {

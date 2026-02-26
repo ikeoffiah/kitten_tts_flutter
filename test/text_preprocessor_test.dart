@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:kitten_tts_flutter/src/text_preprocessor.dart';
+import 'package:flutter_kitten_tts/src/text_preprocessor.dart';
 
 void main() {
   late TextPreprocessor pp;

@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:kitten_tts_flutter/kitten_tts_flutter.dart';
+import 'package:flutter_kitten_tts/flutter_kitten_tts.dart';
 
 void main() {
   test('KittenTTS can be instantiated', () {
