@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.0.4
+
+* Removed `dependency_overrides` from pubspec.yaml so the package uses normal dependency resolution (recommended for published packages; avoids pub validation hints).
+
 ## 0.0.3
 
 * Removed `dependency_overrides` from pubspec.yaml so the package uses normal dependency resolution (recommended for published packages; avoids pub validation hints).
