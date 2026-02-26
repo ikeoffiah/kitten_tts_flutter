@@ -2,11 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## 0.1.1
-
-* **Package renamed** from `kitten_tts_flutter` to `flutter_kitten_tts` to avoid pub.dev name conflict. Update your dependency and imports to `flutter_kitten_tts`.
-
-## 0.1.0
+## 0.0.1
 
 * Initial release of KittenTTS Flutter plugin.
 * KittenTTS v0.8 ONNX model support with espeak-ng phonemization.
