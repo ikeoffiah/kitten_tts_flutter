@@ -7,6 +7,8 @@
 #define PACKAGE_VERSION "1.52.0"
 #define HAVE_STDINT_H 1
 #define HAVE_MKSTEMP 1
+/* Required for speech.c; otherwise PATH_ESPEAK_DATA expands to (int)PATHSEP in speech.h */
+#define PATH_ESPEAK_DATA ""
 /* Use <endian.h> (Android NDK provides it) */
 #undef HAVE_SYS_ENDIAN_H
 

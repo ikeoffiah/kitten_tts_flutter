@@ -12,6 +12,8 @@ endif()
 
 set(ESPEAK_SRC_DIR "${ESPEAK_ROOT}/src/libespeak-ng")
 file(GLOB ESPEAK_SOURCES "${ESPEAK_SRC_DIR}/*.c")
+# Exclude speechPlayer sources when USE_SPEECHPLAYER is 0 (no speechPlayer.h in build)
+list(FILTER ESPEAK_SOURCES EXCLUDE REGEX "sPlayer\\.c$")
 
 # UCD tools for Unicode character classification
 file(GLOB UCD_SOURCES
